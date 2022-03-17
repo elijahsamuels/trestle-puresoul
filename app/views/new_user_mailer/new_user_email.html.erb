@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Welcome to PureSoul Presents, <%= @user.preferred_first_name %> <%= @user.preferred_last_name %></h1>
+    <p>
+      You have successfully signed up and we're excited to start sending gigs your way!
+    </p>
+    <p>
+      Your username is: <%= @user.email %><br>
+    </p>
+    <p>
+      Your password is: <%= @user.password_digest %><br>
+    </p>
+    <p>
+      To login to the site, just follow this link: <%= @url %>.
+    </p>
+    <p>Thanks for joining and have a great day!</p>
+    <p>The PureSoul team</p>
+  </body>
+</html>
