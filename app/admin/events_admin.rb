@@ -88,7 +88,7 @@ Trestle.resource(:events) do
     # end
 
     column :city_and_state, header: "Location", align: :center
-    column :band_size, align: :center
+    column :band_count_fraction, header: "Musician Count", align: :center
     column :finances_total_price, header: "Price", align: :center
     column :profit_margin_floor, header: "Margin", align: :center
     # column :created_at, align: :center
@@ -100,7 +100,7 @@ Trestle.resource(:events) do
   form do |event|
     
     # tab on the event form for financial related things
-    tab :event do
+    tab :event, badge: (icon("fa fa-info")) do
 
       row do
         select(:producer, options_for_select([ "Producer 1", "Producer 2", "Producer 3", "Producer 4", "Producer 5", "Producer 6", "Producer 7", "Producer 8"], selected: event.producer))
@@ -154,39 +154,87 @@ Trestle.resource(:events) do
   end
   
     # tab on the event form for band related things
-    tab :musicians do
+    # , icon('fa fa-users')
+    # tab :musicians, badge: ("musician_#{(i+1).to_s.rjust(2, '0').present?}") do
+    tab :musicians, badge: ("#{event.musician_count}/#{event.band_size.to_i}") do
       col(sm: 1) { select(:band_size, options_for_select((1..20).map {|i| i}, selected: event.band_size)) }
       
+        for i in 0..(event.band_size.to_i - 1)
 
-      for i in 0..(event.band_size.to_i - 1)
-
-        row do 
-          # col(sm: 2) {"Musician #{i+1}: #{User.find_by_id(event.musician_01 )&.primary_instrument}"}
-
-          col(sm: 2) { collection_select("musician_#{(i+1).to_s.rjust(2, '0')}", User.all, :id, :full_name, include_blank: true, label: "Musician #{i+1}: #{User.find_by(id: (i+1))&.primary_instrument}") }
           
-          col(sm: 0.5 ) { mail_to("#{User.find_by(id: (i+1))&.email}", "", "i class" => "fa fa-envelope btn btn-primary rounded-square ml-auto", subject: "The Subject", body: "anemailbody") } 
-          
-          # col(sm: 0.5) { tel_to(1234567890) } #users_admin_path(i+1)
+          row do 
+            # Musician selection
 
-          # icon('fa fa-phone'), users_admin_path(i+1).html_safe, class: "btn btn-primary rounded-square ml-auto"
+            col(sm: 2) { collection_select("musician_#{(i+1).to_s.rjust(2, '0')}", User.all, :id, :full_name, include_blank: true, label: "Musician #{i+1}: #{ User.find_by(id: event["musician_#{(i+1).to_s.rjust(2, '0')}"])&.primary_instrument }
+            ") }
+            
+            # Musician email button/link
+            col(sm: 0.5) { 
+              if (User.find_by(id: event["musician_#{(i+1).to_s.rjust(2, '0')}"])&.present?)
 
-          col(sm: 0.5 ) { link_to(icon('fa fa-calendar'), edit_users_admin_path(i+1).html_safe, class: "btn btn-primary rounded-square ml-auto") }
-          
-          # <i class="fa-solid fa-calendar-lines-pen"></i>
-          col(sm: 0.5) { link_to(icon('fa fa-edit'), edit_users_admin_path(i+1).html_safe, class: "btn btn-primary rounded-square ml-auto") }
-          
-          # col(sm: 2) { link_to icon('fa fa-star'), "Next Page &rarr;".html_safe, class: "btn btn-outline-primary rounded-square ml-auto" }
+                mail_to("#{ User.find_by(id: event["musician_#{(i+1).to_s.rjust(2, '0')}"])&.email }", "", "i class" => "fa fa-envelope btn btn-success rounded-square ml-auto", subject: "The Subject", body: "Testing sample email body text")
 
-          col(sm: 1) { text_field("musician_#{(i+1).to_s.rjust(2, '0')}_pay_rate", prepend: "$", label: "Pay rate") }
+              else
 
-          col(sm: 2) { select("musician_#{(i+1).to_s.rjust(2, '0')}_invited", options_for_select(["Not Invited", "Invited"], selected: "event.musician_#{(i+1).to_s.rjust(2, '0')}_invited" ), {label: "Invited?"}, {class: "form-select"})}
-  
-          col(sm: 2) { select("musician_#{(i+1).to_s.rjust(2, '0')}_accepted", options_for_select(["Pending", "Accepted", "Declined"], selected: "event.musician_#{(i+1).to_s.rjust(2, '0')}_accepted" ), {label: "Accepted?"}, {class: "form-select"})}
-           
+                #  <%= link_to 'Approve', :action => "index", :method => 'activate', :id => user.id, :class => 'btn btn-mini btn-danger' %> 
+
+                # link_to( "Accept", )
+                icon('fa fa-envelope btn btn-disabled rounded-square ml-auto')
+
+              end
+            }
+
+                    # col(sm: 0.5) { link_to(icon('fa fa-phone'), "#{ User.find_by(id: event["musician_#{(i+1).to_s.rjust(2, '0')}"])&.phone }").html_safe } #users_admin_path(i+1)
+
+            # Musician calendar button/link
+            col(sm: 0.5) { 
+              if (User.find_by(id: event["musician_#{(i+1).to_s.rjust(2, '0')}"])&.present?)
+
+                link_to(icon('fa fa-calendar'), edit_users_admin_path("#{ User.find_by(id: event["musician_#{(i+1).to_s.rjust(2, '0')}"])&.id}").html_safe, class: "btn btn-warning rounded-square ml-auto")
+
+              else
+
+                icon('fa fa-calendar btn btn-disabled rounded-square ml-auto')
+
+              end
+            }
+
+            # Edit musician button/link
+            col(sm: 0.5) { 
+              if (User.find_by(id: event["musician_#{(i+1).to_s.rjust(2, '0')}"])&.present?)
+
+                link_to(icon('fa fa-edit'), edit_users_admin_path("#{ User.find_by(id: event["musician_#{(i+1).to_s.rjust(2, '0')}"])&.id}").html_safe, class: "btn btn-primary rounded-square ml-auto") 
+
+              else
+
+                icon('fa fa-edit btn btn-disabled rounded-square ml-auto')
+
+              end
+            }
+
+            # Musician pay rate column
+            col(sm: 1) { text_field("musician_#{(i+1).to_s.rjust(2, '0')}_pay_rate", prepend: "$", label: "Pay rate") }
+            
+            # Musician gig invited status
+            col(sm: 1) { select("musician_#{(i+1).to_s.rjust(2, '0')}_invited".to_sym, 
+              options_for_select(["Not Invited", "Invited"], 
+                selected: event["musician_#{(i+1).to_s.rjust(2, '0')}_invited"] ),
+               {label: "invited?"}, {class: "form-select"}
+             )
+            }
+
+            # Musician gig acceptance status
+            col(sm: 1) { select("musician_#{(i+1).to_s.rjust(2, '0')}_accepted",
+              options_for_select([
+                ["Pending","Pending", class: "invite-pending"], 
+                ["Accepted","Accepted", class: "invite-accepted"], 
+                ["Declined","Declined", class: "invite-declined"]], 
+                selected: event["musician_#{(i+1).to_s.rjust(2, '0')}_accepted"] ),
+              {label: "Accepted?"}, {class: "form-select"})}
+            
+          end
+
         end
-
-      end
 
 
 
@@ -215,7 +263,7 @@ Trestle.resource(:events) do
     end
     
     # tab on the event form for financial related things
-    tab :finances do
+    tab :finances, badge: (icon("fa fa-dollar")) do
 
       row do
         col(sm: 2) { text_field :finances_total_price, label: "Total Quote Price", prepend: "$"}

@@ -36,7 +36,7 @@ class UsersTest < ApplicationSystemTestCase
     fill_in "Has car", with: @user.has_car
     fill_in "Has lighting system", with: @user.has_lighting_system
     fill_in "Has sound system", with: @user.has_sound_system
-    fill_in "Meal prefference", with: @user.meal_prefference
+    fill_in "Meal preference", with: @user.meal_preference
     fill_in "Name on bank account", with: @user.name_on_bank_account
     fill_in "Nick name", with: @user.nick_name
     fill_in "Passport birth date", with: @user.passport_birth_date
@@ -107,7 +107,7 @@ class UsersTest < ApplicationSystemTestCase
     fill_in "Has car", with: @user.has_car
     fill_in "Has lighting system", with: @user.has_lighting_system
     fill_in "Has sound system", with: @user.has_sound_system
-    fill_in "Meal prefference", with: @user.meal_prefference
+    fill_in "Meal preference", with: @user.meal_preference
     fill_in "Name on bank account", with: @user.name_on_bank_account
     fill_in "Nick name", with: @user.nick_name
     fill_in "Passport birth date", with: @user.passport_birth_date

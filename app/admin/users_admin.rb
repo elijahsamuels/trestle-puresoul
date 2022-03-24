@@ -19,7 +19,7 @@ Trestle.resource(:users) do
   #
   form do |user|
 
-    tab :name_and_contact_info, badge: "fa-solid fa-id-card" do
+    tab :name_and_contact_info, badge: (icon("fa fa-id-card")) do
 
       row do
         col(sm: 2) {text_field :preferred_first_name, label: "First Name"}
@@ -49,7 +49,7 @@ Trestle.resource(:users) do
 
     end
 
-    tab :staff_info do
+    tab :staff_info, badge: (icon("fa fa-file-contract")) do
 
       col(sm: 2) { select(:staff_rating, options_for_select([
         "1 - Great",
@@ -70,19 +70,19 @@ Trestle.resource(:users) do
   
     end
 
-    tab :tax_info do
+    tab :tax_info, badge: (icon("fa fa-dollar")) do
+
+    end
+
+    tab :banking_info, badge: (icon("fa fa-building")) do
   
     end
 
-    tab :banking_info do
+    tab :meal_preferences, badge: (icon("fa fa-utensils")) do
   
     end
 
-    tab :meal_preferences do
-  
-    end
-
-    tab :instruments_and_skills do
+    tab :instruments_and_skills, badge: (icon("fa fa-music")) do
       # text_field :primary_instrument
   
       # col(sm: 10) { text_area :staff_notes, label: "Staff Notes" }
@@ -113,9 +113,10 @@ Trestle.resource(:users) do
       # end
 
 
+
+      
       Event.all.where(musician_01: user.id).map do |event| 
 
-        # { e.event_date }
 
         col(sm: 12) { "
           #{event.event_date.to_date.strftime('%a, %B %d, %Y')} - 

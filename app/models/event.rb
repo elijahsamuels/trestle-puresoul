@@ -1,7 +1,9 @@
 class Event < ApplicationRecord
 
-  has_many :users_to_events
-  has_many :users, through: :users_to_events
+  has_many :users
+  has_many :users_to_events, through: :users, foreign_key: :user_id
+  # has_many :users_to_events
+  # has_many :users, through: :users_to_events, foreign_key: :user_id
 
 
   def primary_contact_full_name
@@ -53,6 +55,25 @@ class Event < ApplicationRecord
     phone_number = number_to_phone(phone_number)
     link_to phone_number, "tel:#{phone_number}"
   end
+
+  def musician_count
+    number_of_musicians = 0
+    for i in 0..(self.band_size.to_i)
+      if ((self["musician_#{(i+1).to_s.rjust(2, '0')}"])&.present? )
+        number_of_musicians += 1
+      end
+    end
+    return number_of_musicians
+  end
+
+  def band_count_fraction
+    "#{musician_count}/#{self.band_size}"
+  end
+
+  # def accept_gig_offer
+  #   self.accepted = 'Accepted'
+  #   self.save
+  # end
 
 
   # def profit_margin_color

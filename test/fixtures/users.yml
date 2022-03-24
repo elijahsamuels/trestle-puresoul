@@ -51,7 +51,7 @@ one:
   will_travel_international: MyString
   can_emcee: MyString
   can_lead_band: MyString
-  meal_prefference: MyString
+  meal_preference: MyString
   passport_number: MyString
   passport_expiration: MyString
   passport_date_issued: MyString
@@ -114,7 +114,7 @@ two:
   will_travel_international: MyString
   can_emcee: MyString
   can_lead_band: MyString
-  meal_prefference: MyString
+  meal_preference: MyString
   passport_number: MyString
   passport_expiration: MyString
   passport_date_issued: MyString
